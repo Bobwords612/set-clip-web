@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { stripe, CLIP_PRICE_CENTS } from '@/lib/stripe';
+import { getStripe, CLIP_PRICE_CENTS } from '@/lib/stripe';
 import { createServerClient } from '@/lib/supabase';
 
 export async function POST(request: Request) {
@@ -36,6 +36,7 @@ export async function POST(request: Request) {
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
         // Create Stripe Checkout Session
+        const stripe = getStripe();
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [
